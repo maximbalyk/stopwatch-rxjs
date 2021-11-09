@@ -6,16 +6,16 @@ import { Buttons } from './Buttons';
 import { Display } from './Display';
 
 const Stopwatch: React.FC = () => {
-  const [timeInSeconds, setTimeInSeconds] = useState<number>(0);
+  const [time, setTime] = useState<number>(0);
   const [timerArray, setTimerArray] = useState<Array<number | string>>([]);
   const [intervalId, setIntervalId] = useState<number>(0);
   const [running, setRunning] = useState<boolean>(false);
   const [waitSubject] = useState<Subject<boolean>>(new Subject());
 
-  const calculateTimer = (time: number): Array<number | string> => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time - (hours * 3600)) / 60);
-    const seconds = time - (hours * 3600) - (minutes * 60);
+  const calculateTimer = (allTime: number): Array<number | string> => {
+    const hours = Math.floor(allTime / 3600);
+    const minutes = Math.floor((allTime - (hours * 3600)) / 60);
+    const seconds = allTime - (hours * 3600) - (minutes * 60);
 
     const hoursFormat = hours < 10 ? `0${hours}` : hours;
     const minutesFormat = minutes < 10 ? `0${minutes}` : minutes;
@@ -44,39 +44,39 @@ const Stopwatch: React.FC = () => {
     });
   };
 
-  const emitWaitEvent = () => {
+  const delayEvent = () => {
     waitSubject.next(true);
   };
 
   useEffect(() => {
-    const timeArray: Array<number | string> = calculateTimer(timeInSeconds);
+    const timeArray: Array<number | string> = calculateTimer(time);
 
     handleWaitClick();
 
     setTimerArray(timeArray);
-  }, [timeInSeconds]);
+  }, [time]);
 
-  const handleStartStopButton = () => {
+  const startStopButton = () => {
     if (!running) {
       const interval: any = setInterval(() => {
-        setTimeInSeconds((previousState) => previousState + 1);
+        setTime((previousState) => previousState + 1);
       }, 1000);
 
       setIntervalId(interval);
     } else {
       clearInterval(intervalId);
-      setTimeInSeconds(0);
+      setTime(0);
     }
 
     setRunning(!running);
   };
 
-  const handleResetButton = () => {
+  const resetButton = () => {
     if (running) {
       clearInterval(intervalId);
-      setTimeInSeconds(0);
+      setTime(0);
       const interval: any = setInterval(() => {
-        setTimeInSeconds((previousState) => previousState + 1);
+        setTime((previousState) => previousState + 1);
       }, 1000);
 
       setIntervalId(interval);
@@ -87,9 +87,9 @@ const Stopwatch: React.FC = () => {
     <>
       <Display timerArray={timerArray} />
       <Buttons
-        handleStartStopButton={handleStartStopButton}
-        emitWaitEvent={emitWaitEvent}
-        handleResetButton={handleResetButton}
+        startStopButton={startStopButton}
+        delayEvent={delayEvent}
+        resetButton={resetButton}
       />
     </>
   );

@@ -1,35 +1,35 @@
 import React from 'react';
 
 interface Props {
-  handleStartStopButton: () => void;
-  emitWaitEvent: () => void;
-  handleResetButton: () => void;
+  startStopButton: () => void;
+  delayEvent: () => void;
+  resetButton: () => void;
 }
 
 export const Buttons: React.FC<Props> = ({
-  handleStartStopButton,
-  emitWaitEvent,
-  handleResetButton,
+  startStopButton,
+  delayEvent,
+  resetButton,
 }) => {
   return (
     <div className="d-flex justify-content-center">
       <button
         type="button"
-        onClick={handleStartStopButton}
+        onClick={startStopButton}
         className="btn btn-outline-dark"
       >
         Start/Stop
       </button>
       <button
         type="button"
-        onClick={emitWaitEvent}
+        onClick={delayEvent}
         className="btn btn-outline-dark mx-2"
       >
         Wait
       </button>
       <button
         type="button"
-        onClick={handleResetButton}
+        onClick={resetButton}
         className="btn btn-outline-dark"
       >
         Reset
